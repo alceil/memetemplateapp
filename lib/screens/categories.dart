@@ -19,11 +19,7 @@ class _CategoriesState extends State<Categories> {
     );
   }
 }
-//  Image.asset(
-//                     'images/kindi.jpg',
-//                     width: 700,
-//                     height: 100,
-//                   ),
+
 // Column(
 //           children: <Widget>[
 //             CategoryTile(context: context),
