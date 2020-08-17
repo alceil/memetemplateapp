@@ -5,21 +5,22 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:memetemplate/screens/fullscreen.dart';
 
 class CatogoryView extends StatefulWidget {
+  String loc;
+  CatogoryView({Key key, this.loc}) : super(key: key);
   @override
-  _CatogoryViewState createState() => _CatogoryViewState();
+  _CatogoryViewState createState() => _CatogoryViewState(loc: this.loc);
 }
 
 class _CatogoryViewState extends State<CatogoryView> {
-  final String cat = '';
-  // final CollectionReference collectionReference =
-  //     Firestore.instance.collection('cat');
+  String loc;
+  _CatogoryViewState({Key key, this.loc});
   List<DocumentSnapshot> wlist;
   StreamSubscription<QuerySnapshot> subscription;
   @override
   void initState() {
     super.initState();
     subscription =
-        Firestore.instance.collection(cat).snapshots().listen((snaps) {
+        Firestore.instance.collection(loc).snapshots().listen((snaps) {
       setState(() {
         wlist = snaps.documents;
       });

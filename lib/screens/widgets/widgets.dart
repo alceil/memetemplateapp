@@ -9,30 +9,26 @@ Widget CategoryTile({String cname, String imgurl, BuildContext context}) {
       children: <Widget>[
         ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
-          child: Image.asset(
-            'images/' + imgurl + '.png',
-            width: MediaQuery.of(context).size.width,
-            height: 100,
-          ),
+          child: Image(image: NetworkImage(imgurl)),
         ),
-        Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Colors.black26,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
-        Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.center,
-          child: Text(
-            cname,
-            style: TextStyle(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
-          ),
-        )
+        // Container(
+        //   height: 100,
+        //   width: MediaQuery.of(context).size.width,
+        //   decoration: BoxDecoration(
+        //     color: Colors.black26,
+        //     borderRadius: BorderRadius.circular(8.0),
+        //   ),
+        // ),
+        // Container(
+        //   height: 100,
+        //   width: MediaQuery.of(context).size.width,
+        //   alignment: Alignment.center,
+        //   child: Text(
+        //     imgurl,
+        //     style: TextStyle(
+        //         color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+        //   ),
+        // )
       ],
     ),
   );
