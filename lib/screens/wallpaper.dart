@@ -13,7 +13,7 @@ class _WallScreenState extends State<WallScreen> {
   List<DocumentSnapshot> wallpapersList;
   StreamSubscription<QuerySnapshot> subscription;
   final CollectionReference collectionReference =
-      Firestore.instance.collection("wallpapers");
+      Firestore.instance.collection("general");
   @override
   void initState() {
     // TODO: implement initState
