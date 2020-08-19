@@ -1,4 +1,4 @@
-package com.example.memetemplate
+package com.cgsteam.memetemplate
 
 import io.flutter.embedding.android.FlutterActivity
 
