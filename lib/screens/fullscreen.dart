@@ -1,4 +1,10 @@
+import 'dart:typed_data';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:image_downloader/image_downloader.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 class FullScreenImagePage extends StatelessWidget {
   String imgPath;
@@ -8,8 +14,6 @@ class FullScreenImagePage extends StatelessWidget {
       colors: [new Color(0x10000000), new Color(0x30000000)],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight);
-
-  _downloadImage(String imgpath) {}
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,23 @@ class FullScreenImagePage extends StatelessWidget {
               height: 40,
             ),
             InkWell(
-              onTap: () {},
+              onTap: () async {
+                final status = await Permission.storage.request();
+
+                if (status.isGranted) {
+                  final externalDir = await getExternalStorageDirectory();
+
+                  final id = await FlutterDownloader.enqueue(
+                    url: imgPath,
+                    savedDir: externalDir.path,
+                    fileName: "download",
+                    showNotification: true,
+                    openFileFromNotification: true,
+                  );
+                } else {
+                  print("Permission deined");
+                }
+              },
               child: Container(
                 height: 50,
                 width: 100,
