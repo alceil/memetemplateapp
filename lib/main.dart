@@ -16,7 +16,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Isolate Demo';
+    final appTitle = 'Kannada Meme Templates';
 
     return MaterialApp(
       title: appTitle,

@@ -47,7 +47,7 @@ class FullScreenImagePage extends StatelessWidget {
               child: new Image.network(imgPath),
             ),
             SizedBox(
-              height: 40,
+              height: 20,
             ),
             InkWell(
               onTap: () async {

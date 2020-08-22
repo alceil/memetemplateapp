@@ -11,22 +11,18 @@ class Categories1 extends StatefulWidget {
 
 class _Categories1State extends State<Categories1> {
   final CollectionReference ref = Firestore.instance.collection('categories');
-    BannerAd myBanner;
-
-  BannerAd buildBannerAd() {
-    return BannerAd(
-        adUnitId: BannerAd.testAdUnitId,
-        size: AdSize.banner,
-        listener: (MobileAdEvent event) {
-          if (event == MobileAdEvent.loaded) {
-            myBanner..show();
-          }
-        });
+  String getintadid() {
+    return 'ca-app-pub-8197704697256296/3861583802';
   }
+
+  String appid() {
+    return 'ca-app-pub-8197704697256296~8003992887';
+  }
+
   InterstitialAd myInterstitial;
   InterstitialAd buildInterstitialAd() {
     return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: getintadid(),
       listener: (MobileAdEvent event) {
         if (event == MobileAdEvent.failedToLoad) {
           myInterstitial..load();
@@ -45,7 +41,7 @@ class _Categories1State extends State<Categories1> {
   @override
   void initState() {
     super.initState();
-
+    FirebaseAdMob.instance.initialize(appId: appid());
     myInterstitial = buildInterstitialAd()..load();
   }
 
@@ -59,6 +55,9 @@ class _Categories1State extends State<Categories1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Categories'),
+      ),
       body: StreamBuilder(
           stream: ref.snapshots(),
           builder: (context, snapshot) {
@@ -86,4 +85,3 @@ class _Categories1State extends State<Categories1> {
     );
   }
 }
-1

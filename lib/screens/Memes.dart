@@ -15,7 +15,7 @@ class _WallScreen1State extends State<WallScreen1> {
   StreamSubscription<QuerySnapshot> subscription;
   final CollectionReference collectionReference =
       Firestore.instance.collection("general");
-      BannerAd myBanner;
+  BannerAd myBanner;
 
   BannerAd buildBannerAd() {
     return BannerAd(
@@ -27,11 +27,20 @@ class _WallScreen1State extends State<WallScreen1> {
           }
         });
   }
+
+  String getintadid() {
+    return 'ca-app-pub-8197704697256296/3861583802';
+  }
+
+  String appid() {
+    return 'ca-app-pub-8197704697256296~8003992887';
+  }
+
   InterstitialAd myInterstitial;
 
   InterstitialAd buildInterstitialAd() {
     return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: getintadid(),
       listener: (MobileAdEvent event) {
         if (event == MobileAdEvent.failedToLoad) {
           myInterstitial..load();
@@ -51,7 +60,8 @@ class _WallScreen1State extends State<WallScreen1> {
   void initState() {
     super.initState();
     myInterstitial = buildInterstitialAd()..load();
-     myBanner = buildBannerAd()..load();
+    myBanner = buildBannerAd()..load();
+    FirebaseAdMob.instance.initialize(appId: appid());
     subscription = collectionReference.snapshots().listen((datasnapshot) {
       setState(() {
         wallpapersList = datasnapshot.documents;
@@ -62,7 +72,7 @@ class _WallScreen1State extends State<WallScreen1> {
   @override
   void dispose() {
     subscription?.cancel();
-     myBanner.dispose();
+    myBanner.dispose();
     myInterstitial.dispose();
     super.dispose();
   }
@@ -70,7 +80,7 @@ class _WallScreen1State extends State<WallScreen1> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
           title: Text('Memes'),
         ),
         body: wallpapersList != null

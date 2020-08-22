@@ -1,6 +1,8 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:memetemplate/screens/Memes.dart';
 import 'package:memetemplate/screens/categories.dart';
+import 'package:memetemplate/screens/categories1.dart';
 import 'package:memetemplate/screens/wallpaper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,11 +20,36 @@ class _HomeState extends State<Home> {
     }
   }
 
+  String getintadid() {
+    return 'ca-app-pub-8197704697256296/3861583802';
+  }
+
+  String appid() {
+    return 'ca-app-pub-8197704697256296~8003992887';
+  }
+
+  String bannerid() {
+    return 'ca-app-pub-3263954522700294/4117286019';
+  }
+
+  BannerAd myBanner;
+
+  BannerAd buildBannerAd() {
+    return BannerAd(
+        adUnitId: bannerid(),
+        size: AdSize.banner,
+        listener: (MobileAdEvent event) {
+          if (event == MobileAdEvent.loaded) {
+            myBanner..show();
+          }
+        });
+  }
+
   InterstitialAd myInterstitial;
 
   InterstitialAd buildInterstitialAd() {
     return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: getintadid(),
       listener: (MobileAdEvent event) {
         if (event == MobileAdEvent.failedToLoad) {
           myInterstitial..load();
@@ -42,13 +69,14 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    FirebaseAdMob.instance.initialize(appId: appid());
+    myBanner = buildBannerAd()..load();
     myInterstitial = buildInterstitialAd()..load();
-    //myBanner = buildLargeBannerAd()..load();
   }
 
   @override
   void dispose() {
+    myBanner.dispose();
     myInterstitial.dispose();
     super.dispose();
   }
@@ -65,13 +93,13 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 DrawerHeader(
                     decoration: BoxDecoration(
-                      color: Colors.orange,
+                      color: Colors.white,
                     ),
                     child: Center(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child:
-                            Image(image: AssetImage('images/ic_launcher.png')),
+                            Image(image: AssetImage('images/ic_launcher1.png')),
                       ),
                     )),
                 ListTile(
@@ -173,7 +201,7 @@ class _HomeState extends State<Home> {
           ),
           appBar: AppBar(
             title: Text(
-              'Meme hub',
+              'Kannada Memes',
               style: TextStyle(color: Colors.black),
             ),
             centerTitle: true,
