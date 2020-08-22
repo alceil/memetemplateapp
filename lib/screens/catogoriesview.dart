@@ -37,7 +37,7 @@ class _CatogoryViewState extends State<CatogoryView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('kindi'),
+          title: Text('Memes'),
         ),
         body: wlist != null
             ? StaggeredGridView.countBuilder(

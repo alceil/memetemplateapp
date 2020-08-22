@@ -5,12 +5,12 @@ import 'dart:async';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:memetemplate/screens/fullscreen.dart';
 
-class WallScreen extends StatefulWidget {
+class WallScreen1 extends StatefulWidget {
   @override
-  _WallScreenState createState() => new _WallScreenState();
+  _WallScreen1State createState() => new _WallScreen1State();
 }
 
-class _WallScreenState extends State<WallScreen> {
+class _WallScreen1State extends State<WallScreen1> {
   List<DocumentSnapshot> wallpapersList;
   StreamSubscription<QuerySnapshot> subscription;
   final CollectionReference collectionReference =
@@ -70,6 +70,9 @@ class _WallScreenState extends State<WallScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: AppBar(
+          title: Text('Memes'),
+        ),
         body: wallpapersList != null
             ? new StaggeredGridView.countBuilder(
                 padding: const EdgeInsets.all(8.0),

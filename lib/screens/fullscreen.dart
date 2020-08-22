@@ -71,6 +71,7 @@ class FullScreenImagePage extends StatelessWidget {
                 height: 50,
                 width: 100,
                 decoration: BoxDecoration(
+                    border: Border.all(width: 5.0, color: Colors.black),
                     borderRadius: BorderRadius.circular(8.0),
                     color: Colors.blue),
                 child: Center(

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:memetemplate/screens/catogoriesview.dart';
 import 'package:memetemplate/screens/widgets/widgets.dart';
 
-class Categories extends StatefulWidget {
+class Categories1 extends StatefulWidget {
   @override
-  _CategoriesState createState() => _CategoriesState();
+  _Categories1State createState() => _Categories1State();
 }
 
-class _CategoriesState extends State<Categories> {
+class _Categories1State extends State<Categories1> {
   final CollectionReference ref = Firestore.instance.collection('categories');
     BannerAd myBanner;
 
@@ -86,3 +86,4 @@ class _CategoriesState extends State<Categories> {
     );
   }
 }
+1
