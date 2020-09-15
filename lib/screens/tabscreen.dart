@@ -86,135 +86,142 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
         length: 2,
         initialIndex: 0,
-        child: Scaffold(
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child:
-                            Image(image: AssetImage('images/ic_launcher1.png')),
+        child: SafeArea(
+          child: Scaffold(
+            drawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                       ),
-                    )),
-                ListTile(
-                  leading: Icon(Icons.image),
-                  title: Text('Memes'),
-                  onTap: () {
-                    showInterstitialAd();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => WallScreen1()));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.image_aspect_ratio),
-                  title: Text('Templates'),
-                  onTap: () {
-                    showInterstitialAd();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Categories1()));
-                  },
-                ),
-                Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('More Options'),
-                ),
-                SizedBox(height: 20),
-                ListTile(
-                  leading: Icon(Icons.star),
-                  title: Text('Rate this App'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.share),
-                  title: Text('Share this App'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.message),
-                  title: Text('Template Request'),
-                  onTap: () {
-                    launchurl(
-                        'https://api.whatsapp.com/send?phone=916361569493');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.system_update),
-                  title: Text('Template Submission'),
-                  onTap: () {
-                    launchurl(
-                        'https://docs.google.com/forms/d/e/1FAIpQLSd7bTzJV-NOJwGKSowpmkX5KUoJ0bYJheDazyyZsAEvbdPlNQ/viewform?usp=sf_link');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.text_fields),
-                  title: Text('Privacy Policy'),
-                  onTap: () {
-                    launchurl(
-                        'https://sites.google.com/view/privacypolicy-kannadameme/home');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.info),
-                  title: Text('About'),
-                  onTap: () {
-                    showAboutDialog(
-                        context: context,
-                        applicationVersion: '1.1.1',
-                        applicationIcon: Image.asset('images/ic_launcher.png'),
-                        applicationName: 'Kannada Meme Templates',
-                        applicationLegalese:
-                            'This App can be used by all audiences',
-                        children: [
-                          Text(
-                              'A Meme Template App which has ready made template to be used by the Memers to make memes'),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text('Our Teams Instagram Handles'),
-                          ListTile(
-                            leading: Image(
-                              image: AssetImage('images/insta.png'),
+                      child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image(
+                              image: AssetImage('images/ic_launcher1.png')),
+                        ),
+                      )),
+                  ListTile(
+                    leading: Icon(Icons.image),
+                    title: Text('Memes'),
+                    onTap: () {
+                      showInterstitialAd();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WallScreen1()));
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.image_aspect_ratio),
+                    title: Text('Templates'),
+                    onTap: () {
+                      showInterstitialAd();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Categories1()));
+                    },
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('More Options'),
+                  ),
+                  SizedBox(height: 20),
+                  ListTile(
+                    leading: Icon(Icons.star),
+                    title: Text('Rate this App'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.share),
+                    title: Text('Share this App'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('Template Request'),
+                    onTap: () {
+                      launchurl(
+                          'https://api.whatsapp.com/send?phone=916361569493');
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.system_update),
+                    title: Text('Template Submission'),
+                    onTap: () {
+                      launchurl(
+                          'https://docs.google.com/forms/d/e/1FAIpQLSd7bTzJV-NOJwGKSowpmkX5KUoJ0bYJheDazyyZsAEvbdPlNQ/viewform?usp=sf_link');
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.text_fields),
+                    title: Text('Privacy Policy'),
+                    onTap: () {
+                      launchurl(
+                          'https://sites.google.com/view/privacypolicy-kannadameme/home');
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.info),
+                    title: Text('About'),
+                    onTap: () {
+                      showAboutDialog(
+                          context: context,
+                          applicationVersion: '1.1.1',
+                          applicationIcon:
+                              Image.asset('images/ic_launcher.png'),
+                          applicationName: 'Kannada Meme Templates',
+                          applicationLegalese:
+                              'This App can be used by all audiences',
+                          children: [
+                            Text(
+                                'A Meme Template App which has ready made template to be used by the Memers to make memes'),
+                            SizedBox(
+                              height: 20,
                             ),
-                            title: Text('@troll_nanaganisiddu'),
-                            onTap: () {
-                              launchurl(
-                                  'https://instagram.com/troll_nanaganisiddu?igshid=1ut1nnht6lo7l');
-                            },
-                          ),
-                          ListTile(
-                            leading:
-                                Image(image: AssetImage('images/insta.png')),
-                            title: Text('@kannadagurujistudio'),
-                            onTap: () => launchurl(
-                                'https://instagram.com/kannadagurujistudio?igshid=nf41pszdqxor'),
-                          ),
-                        ]);
-                  },
-                ),
-              ],
-            ),
-          ),
-          appBar: AppBar(
-            title: Text(
-              'Kannada Memes',
-              style: TextStyle(color: Colors.black),
-            ),
-            centerTitle: true,
-            elevation: 5.0,
-            actions: <Widget>[],
-            bottom: TabBar(tabs: <Widget>[
-              Tab(
-                text: 'Memes',
+                            Text('Our Teams Instagram Handles'),
+                            ListTile(
+                              leading: Image(
+                                image: AssetImage('images/insta.png'),
+                              ),
+                              title: Text('@troll_nanaganisiddu'),
+                              onTap: () {
+                                launchurl(
+                                    'https://instagram.com/troll_nanaganisiddu?igshid=1ut1nnht6lo7l');
+                              },
+                            ),
+                            ListTile(
+                              leading:
+                                  Image(image: AssetImage('images/insta.png')),
+                              title: Text('@kannadagurujistudio'),
+                              onTap: () => launchurl(
+                                  'https://instagram.com/kannadagurujistudio?igshid=nf41pszdqxor'),
+                            ),
+                          ]);
+                    },
+                  ),
+                ],
               ),
-              Tab(text: 'Categories'),
-            ]),
+            ),
+            appBar: AppBar(
+              title: Text(
+                'Kannada Memes',
+                style: TextStyle(color: Colors.black),
+              ),
+              centerTitle: true,
+              elevation: 5.0,
+              actions: <Widget>[],
+              bottom: TabBar(tabs: <Widget>[
+                Tab(
+                  text: 'Memes',
+                ),
+                Tab(text: 'Categories'),
+              ]),
+            ),
+            body: TabBarView(children: <Widget>[WallScreen(), Categories()]),
           ),
-          body: TabBarView(children: <Widget>[WallScreen(), Categories()]),
         ));
   }
 }
