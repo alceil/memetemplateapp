@@ -37,6 +37,17 @@ class _CategoriesState extends State<Categories> {
     );
   }
 
+  void getData()
+  {
+    var res = await networkHandler.get(
+                          "memes/genMeme");
+       res['catname'].forEach((kindi){
+         imgurls.add(kindi);
+
+       });               
+
+  }
+
   void showInterstitialAd() {
     myInterstitial..show();
   }
