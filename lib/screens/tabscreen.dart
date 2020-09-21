@@ -1,4 +1,5 @@
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:memetemplate/screens/Memes.dart';
 import 'package:memetemplate/screens/categories.dart';
@@ -107,22 +108,22 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.image),
                     title: Text('Memes'),
                     onTap: () {
-                      showInterstitialAd();
+                      // showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WallScreen1()));
+                              builder: (context) => Categories()));
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.image_aspect_ratio),
                     title: Text('Templates'),
                     onTap: () {
-                      showInterstitialAd();
+                      // showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Categories1()));
+                              builder: (context) => WallScreen()));
                     },
                   ),
                   Divider(),

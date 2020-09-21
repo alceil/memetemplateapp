@@ -40,6 +40,7 @@ dependencies:
   firebase_admob:
   firebase_analytics:
   firebase_messaging:  
+  cached_network_image:
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:async';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:memetemplate/screens/fullscreen.dart';
+import 'package:memetemplate/services/networkhandler.dart';
 
 class WallScreen extends StatefulWidget {
   @override
@@ -13,15 +12,15 @@ class WallScreen extends StatefulWidget {
 class _WallScreenState extends State<WallScreen> {
   final networkHandler = Networkhandling();
   // List<DocumentSnapshot> wallpapersList;
-  // List<String> kindi = [
-  //   'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_1585668593523.jpg?alt=media&token=8d43c80a-672c-48f4-9f83-fba12f13b348',
-  //   'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_1585668614177.jpg?alt=media&token=d720a2cd-d255-4d84-a436-2a32fbebac7a',
-  //   'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_Plus_1595537994910.jpg?alt=media&token=df43cca1-c341-41dd-b037-38018db86092',
-  //   'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_Plus_1595536466687.jpg?alt=media&token=aec07574-3237-4c79-b616-897460bd2dea',
-  //   'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_Plus_1595536436947.jpg?alt=media&token=96d1d1e0-3c05-4972-9cf3-dc99edc3ee3d'
-  // ];
+  List<String> kindi = [
+    'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_1585668593523.jpg?alt=media&token=8d43c80a-672c-48f4-9f83-fba12f13b348',
+    'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_1585668614177.jpg?alt=media&token=d720a2cd-d255-4d84-a436-2a32fbebac7a',
+    'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_Plus_1595537994910.jpg?alt=media&token=df43cca1-c341-41dd-b037-38018db86092',
+    'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_Plus_1595536466687.jpg?alt=media&token=aec07574-3237-4c79-b616-897460bd2dea',
+    'https://firebasestorage.googleapis.com/v0/b/memetemplate-3a61b.appspot.com/o/PhotoGrid_Plus_1595536436947.jpg?alt=media&token=96d1d1e0-3c05-4972-9cf3-dc99edc3ee3d'
+  ];
 
-  List<String> imgurls = [];
+  List imgurls = [];
 
   // StreamSubscription<QuerySnapshot> subscription;
   // final CollectionReference collectionReference =
@@ -30,17 +29,13 @@ class _WallScreenState extends State<WallScreen> {
   // String getintadid() {
   //   return 'ca-app-pub-8197704697256296/3861583802';
   // }
-  void getData()
-  {
-    var res = await networkHandler.get(
-                          "memes/genMeme");
-        for(i=0;i<res.length;i++)
-        {
-          imgurls.add(res[i]['imgurls']);
-        }                  
-
+  void getData() async {
+    var res = await networkHandler.get("/memes/genMeme");
+    print(res);
+    setState(() {
+      imgurls = res;
+    });
   }
-  
 
   // String appid() {
   //   return 'ca-app-pub-8197704697256296~8003992887';
@@ -66,19 +61,18 @@ class _WallScreenState extends State<WallScreen> {
   //   myInterstitial..show();
   // }
 
-  @override
-  void initState() {
-    super.initState();
-    // FirebaseAdMob.instance.initialize(appId: appid());
-    // myInterstitial = buildInterstitialAd()..load();
-    // subscription = collectionReference.snapshots().listen((datasnapshot) {
-    //   setState(() {
-    //     wallpapersList = datasnapshot.documents;
-    //   });
-    // });
+  // @override
+  // void initState() {
+  //   super.initState();
 
-  }
-
+  //   // FirebaseAdMob.instance.initialize(appId: appid());
+  //   // myInterstitial = buildInterstitialAd()..load();
+  //   // subscription = collectionReference.snapshots().listen((datasnapshot) {
+  //   //   setState(() {
+  //   //     wallpapersList = datasnapshot.documents;
+  //   //   });
+  //   // });
+  // }
 
   // @override
   // void dispose() {
@@ -87,6 +81,13 @@ class _WallScreenState extends State<WallScreen> {
   //   // myInterstitial.dispose();
   //   super.dispose();
   // }
+  @override
+  void initState() {
+    super.initState();
+    // FirebaseAdMob.instance.initialize(appId: appid());
+    // myInterstitial = buildInterstitialAd()..load();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,23 +98,23 @@ class _WallScreenState extends State<WallScreen> {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, crossAxisSpacing: 6.0, mainAxisSpacing: 6.0),
           itemCount: imgurls.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (context, i) {
             return InkWell(
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              FullScreenImagePage(kindi[index])));
+                              FullScreenImagePage(imgurls[i]['imgUrl'])));
                 },
                 child: Hero(
-                  tag: kindi[index],
+                  tag: imgurls[i]['imgUrl'],
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: CachedNetworkImage(
+                      imageUrl: imgurls[i]['imgUrl'],
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
-                      imageUrl: 'https://picsum.photos/250?image=9',
                     ),
                   ),
                 ));

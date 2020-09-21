@@ -77,9 +77,8 @@ class _Categories1State extends State<Categories1> {
                       },
                       child: CategoryTile(
                           context: context,
-                          imgurl:
-                              snapshot.data.documents[i].data['url'].toString(),
-                          cname: snapshot.data.documents[i].data['catname']),
+                          imgurl: snapshot.data.documents[i].data['url']
+                              .toString()),
                     ));
           }),
     );
