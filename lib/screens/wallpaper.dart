@@ -92,34 +92,60 @@ class _WallScreenState extends State<WallScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 6.0, mainAxisSpacing: 6.0),
-          itemCount: imgurls.length,
-          itemBuilder: (context, i) {
-            return InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              FullScreenImagePage(imgurls[i]['imgUrl'])));
+      body: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xfff5f8fd),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                    child: TextField(
+                  decoration: InputDecoration(
+                      hintText: "search wallpapers", border: InputBorder.none),
+                )),
+                Container(child: Icon(Icons.search))
+              ],
+            ),
+          ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 6.0,
+                    mainAxisSpacing: 6.0),
+                itemCount: imgurls.length,
+                itemBuilder: (context, i) {
+                  return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FullScreenImagePage(imgurls[i]['imgUrl'])));
+                      },
+                      child: Hero(
+                        tag: imgurls[i]['imgUrl'],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: CachedNetworkImage(
+                            imageUrl: imgurls[i]['imgUrl'],
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                          ),
+                        ),
+                      ));
                 },
-                child: Hero(
-                  tag: imgurls[i]['imgUrl'],
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: CachedNetworkImage(
-                      imageUrl: imgurls[i]['imgUrl'],
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                    ),
-                  ),
-                ));
-          },
-        ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
