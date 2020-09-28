@@ -4,6 +4,7 @@ import 'package:memetemplate/screens/Memes.dart';
 import 'package:memetemplate/screens/categories.dart';
 import 'package:memetemplate/screens/categories1.dart';
 import 'package:memetemplate/screens/wallpaper.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
@@ -134,10 +135,18 @@ class _HomeState extends State<Home> {
                   ListTile(
                     leading: Icon(Icons.star),
                     title: Text('Rate this App'),
+                    onTap: () {
+                      launchurl(
+                          'https://play.google.com/store/apps/details?id=com.cgsteam.memetemplate');
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.share),
                     title: Text('Share this App'),
+                    onTap: () {
+                      Share.share(
+                          'https://play.google.com/store/apps/details?id=com.cgsteam.memetemplate');
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.message),
