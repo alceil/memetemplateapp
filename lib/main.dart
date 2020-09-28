@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:memetemplate/screens/tabscreen.dart';
-import 'package:memetemplate/screens/wallpaper.dart';
-
-// void main() => runApp(MyApp());
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

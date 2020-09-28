@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class Networkhandling {
@@ -33,11 +31,6 @@ class Networkhandling {
     var response = await request.send();
     var res = await http.Response.fromStream(response);
     return res;
-  }
-
-  NetworkImage getImage(String url) {
-    String url = formatter('kindi');
-    NetworkImage(url);
   }
 
   String formatter(String url) => baseurl + url;

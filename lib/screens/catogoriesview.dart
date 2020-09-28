@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:memetemplate/screens/fullscreen.dart';
 
 class CatogoryView extends StatefulWidget {
@@ -14,60 +12,176 @@ class CatogoryView extends StatefulWidget {
 
 class _CatogoryViewState extends State<CatogoryView> {
   List loc;
+  List test;
+  List searchresult = new List();
+  final globalKey = new GlobalKey<ScaffoldState>();
+  final TextEditingController _controller = new TextEditingController();
   _CatogoryViewState({Key key, this.loc});
+  Widget appBarTitle = new Text(
+    "Meme",
+    style: new TextStyle(color: Colors.black),
+  );
+  Icon icon = new Icon(
+    Icons.search,
+    color: Colors.black,
+  );
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   subscription =
-  //       Firestore.instance.collection(loc).snapshots().listen((snaps) {
-  //     setState(() {
-  //       wlist = snaps.documents;
-  //     });
-  //   });
-  // }
+  String getintadid() {
+    return 'ca-app-pub-8197704697256296/3861583802';
+  }
 
-  // @override
-  // void dispose() {
-  //   subscription?.cancel();
-  //   super.dispose();
-  // }
+  String appid() {
+    return 'ca-app-pub-8197704697256296~8003992887';
+  }
+
+  InterstitialAd myInterstitial;
+
+  InterstitialAd buildInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: getintadid(),
+      listener: (MobileAdEvent event) {
+        if (event == MobileAdEvent.failedToLoad) {
+          myInterstitial..load();
+        } else if (event == MobileAdEvent.closed) {
+          myInterstitial = buildInterstitialAd()..load();
+        }
+        print(event);
+      },
+    );
+  }
+
+  void showInterstitialAd() {
+    myInterstitial..show();
+  }
+
+  void searchOperation(String searchText) {
+    setState(() {
+      searchresult = loc
+          .where((r) => (r['memename']
+              .toLowerCase()
+              .contains(searchText.trim().toLowerCase())))
+          .toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    test = loc;
+    print(loc);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Memes'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 6.0, mainAxisSpacing: 6.0),
-          itemCount: loc.length,
-          itemBuilder: (context, i) {
-            return InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              FullScreenImagePage(loc[i]['url'])));
-                },
-                child: Hero(
-                  tag: loc[i],
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: CachedNetworkImage(
-                      imageUrl: loc[i]['url'],
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
+      key: globalKey,
+      appBar: AppBar(title: appBarTitle, actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: new IconButton(
+            icon: icon,
+            onPressed: () {
+              setState(() {
+                if (this.icon.icon == Icons.search) {
+                  this.icon = new Icon(
+                    Icons.close,
+                    color: Colors.black,
+                  );
+                  this.appBarTitle = new TextField(
+                    controller: _controller,
+                    style: new TextStyle(
+                      color: Colors.black,
                     ),
-                  ),
-                ));
-          },
+                    decoration: new InputDecoration(
+                        prefixIcon: new Icon(Icons.search, color: Colors.white),
+                        hintText: "Search...",
+                        hintStyle: new TextStyle(color: Colors.white)),
+                    onChanged: searchOperation,
+                  );
+                } else {
+                  setState(() {
+                    this.icon = new Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    );
+                    this.appBarTitle = new Text(
+                      "Meme",
+                      style: new TextStyle(color: Colors.black),
+                    );
+                    _controller.clear();
+                  });
+                }
+              });
+            },
+          ),
         ),
-      ),
+      ]),
+      body: searchresult.length != 0 || _controller.text.isNotEmpty
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 6.0,
+                    mainAxisSpacing: 6.0),
+                itemCount: searchresult.length,
+                itemBuilder: (context, i) {
+                  return InkWell(
+                      onTap: () {
+                        showInterstitialAd();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FullScreenImagePage(
+                                    searchresult[i]['url'],
+                                    searchresult[i]['memename'])));
+                      },
+                      child: Hero(
+                        tag: searchresult[i]['url'],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: CachedNetworkImage(
+                            imageUrl: searchresult[i]['url'],
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                          ),
+                        ),
+                      ));
+                },
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 6.0,
+                    mainAxisSpacing: 6.0),
+                itemCount: test.length,
+                itemBuilder: (context, i) {
+                  return InkWell(
+                      onTap: () {
+                        showInterstitialAd();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FullScreenImagePage(
+                                    test[i]['url'], test[i]['memename'])));
+                      },
+                      child: Hero(
+                        tag: test[i]['url'],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: CachedNetworkImage(
+                            imageUrl: test[i]['url'],
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                          ),
+                        ),
+                      ));
+                },
+              ),
+            ),
     );
   }
 }

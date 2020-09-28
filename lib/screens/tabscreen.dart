@@ -1,5 +1,4 @@
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:memetemplate/screens/Memes.dart';
 import 'package:memetemplate/screens/categories.dart';
@@ -29,22 +28,22 @@ class _HomeState extends State<Home> {
     return 'ca-app-pub-8197704697256296~8003992887';
   }
 
-  String bannerid() {
-    return 'ca-app-pub-3263954522700294/4117286019';
-  }
+  // String bannerid() {
+  //   return 'ca-app-pub-3263954522700294/4117286019';
+  // }
 
-  BannerAd myBanner;
+  // BannerAd myBanner;
 
-  BannerAd buildBannerAd() {
-    return BannerAd(
-        adUnitId: bannerid(),
-        size: AdSize.banner,
-        listener: (MobileAdEvent event) {
-          if (event == MobileAdEvent.loaded) {
-            myBanner..show();
-          }
-        });
-  }
+  // BannerAd buildBannerAd() {
+  //   return BannerAd(
+  //       adUnitId: bannerid(),
+  //       size: AdSize.banner,
+  //       listener: (MobileAdEvent event) {
+  //         if (event == MobileAdEvent.loaded) {
+  //           myBanner..show();
+  //         }
+  //       });
+  // }
 
   InterstitialAd myInterstitial;
 
@@ -71,13 +70,13 @@ class _HomeState extends State<Home> {
     super.initState();
 
     FirebaseAdMob.instance.initialize(appId: appid());
-    myBanner = buildBannerAd()..load();
+    // myBanner = buildBannerAd()..load();
     myInterstitial = buildInterstitialAd()..load();
   }
 
   @override
   void dispose() {
-    myBanner.dispose();
+    // myBanner.dispose();
     myInterstitial.dispose();
     super.dispose();
   }
@@ -108,22 +107,22 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.image),
                     title: Text('Memes'),
                     onTap: () {
-                      // showInterstitialAd();
+                      showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Categories()));
+                              builder: (context) => WallScreen1()));
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.image_aspect_ratio),
                     title: Text('Templates'),
                     onTap: () {
-                      // showInterstitialAd();
+                      showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WallScreen()));
+                              builder: (context) => Categories1()));
                     },
                   ),
                   Divider(),

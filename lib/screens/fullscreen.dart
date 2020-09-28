@@ -1,14 +1,13 @@
-import 'dart:typed_data';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:image_downloader/image_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 
 class FullScreenImagePage extends StatelessWidget {
   String imgPath;
-  FullScreenImagePage(this.imgPath);
+  String filename;
+  FullScreenImagePage(this.imgPath, this.filename);
+  // String name= "$filename";
 
   final LinearGradient backgroundGradient = new LinearGradient(
       colors: [new Color(0x10000000), new Color(0x30000000)],
@@ -59,7 +58,7 @@ class FullScreenImagePage extends StatelessWidget {
                   final id = await FlutterDownloader.enqueue(
                     url: imgPath,
                     savedDir: externalDir.path,
-                    fileName: "download",
+                    fileName: filename,
                     showNotification: true,
                     openFileFromNotification: true,
                   );
