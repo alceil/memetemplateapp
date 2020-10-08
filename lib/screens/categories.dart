@@ -14,7 +14,7 @@ class _CategoriesState extends State<Categories> {
   final networkHandler = Networkhandling();
   final globalKey = new GlobalKey<ScaffoldState>();
   final TextEditingController _controller = new TextEditingController();
-
+  bool loader = true;
   List<Category> searchresult = [];
 
   List imgurls = [];
@@ -66,6 +66,7 @@ class _CategoriesState extends State<Categories> {
     setState(() {
       imgurls = res;
       catlist = imgurls.map((e) => Category.fromJson(e)).toList();
+      loader = false;
     });
   }
 
@@ -100,103 +101,111 @@ class _CategoriesState extends State<Categories> {
 
   @override
   Widget build(BuildContext context) {
-    getData();
-    return Scaffold(
-        key: globalKey,
-        body: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xfff5f8fd),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              margin: EdgeInsets.symmetric(horizontal: 24),
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                        hintText: "search wallpapers",
-                        border: InputBorder.none),
-                    onChanged: searchOperation,
-                  )),
-                  Container(child: Icon(Icons.search))
-                ],
-              ),
-            ),
-            Flexible(
-                child: searchresult.length != 0 || _controller.text.isNotEmpty
-                    ? new ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: searchresult.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                            onTap: () {
-                              showInterstitialAd();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CatogoryView(
-                                            loc: searchresult[index].catdata,
-                                          )));
-                            },
-                            child: new Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: searchresult[index].imgurl,
-                                        placeholder: (context, url) =>
-                                            Image.asset(
-                                                'images/categoryph.jpeg'),
-                                      )),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : new ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: catlist.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                            onTap: () {
-                              showInterstitialAd();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CatogoryView(
-                                            loc: catlist[index].catdata,
-                                          )));
-                            },
-                            child: new Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: catlist[index].imgurl,
-                                        placeholder: (context, url) =>
-                                            Image.asset(
-                                                'images/categoryph.jpeg'),
-                                      )),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+    return loader
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            key: globalKey,
+            body: Column(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xfff5f8fd),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                            hintText: "search templates",
+                            border: InputBorder.none),
+                        onChanged: searchOperation,
                       )),
-          ],
-        ));
+                      Container(child: Icon(Icons.search))
+                    ],
+                  ),
+                ),
+                Flexible(
+                    child: searchresult.length != 0 ||
+                            _controller.text.isNotEmpty
+                        ? new ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: searchresult.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return InkWell(
+                                onTap: () {
+                                  showInterstitialAd();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CatogoryView(
+                                                loc:
+                                                    searchresult[index].catdata,
+                                              )));
+                                },
+                                child: new Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Stack(
+                                    children: <Widget>[
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                searchresult[index].imgurl,
+                                            placeholder: (context, url) =>
+                                                Image.asset(
+                                                    'images/categoryph.jpeg'),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : new ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: catlist.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return InkWell(
+                                onTap: () {
+                                  showInterstitialAd();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CatogoryView(
+                                                loc: catlist[index].catdata,
+                                              )));
+                                },
+                                child: new Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Stack(
+                                    children: <Widget>[
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: catlist[index].imgurl,
+                                            placeholder: (context, url) =>
+                                                Image.asset(
+                                                    'images/categoryph.jpeg'),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )),
+              ],
+            ));
   }
 }
 

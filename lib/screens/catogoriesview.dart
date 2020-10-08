@@ -128,7 +128,7 @@ class _CatogoryViewState extends State<CatogoryView> {
                 itemBuilder: (context, i) {
                   return InkWell(
                       onTap: () {
-                        showInterstitialAd();
+                        // showInterstitialAd();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -143,7 +143,7 @@ class _CatogoryViewState extends State<CatogoryView> {
                           child: CachedNetworkImage(
                             imageUrl: searchresult[i]['url'],
                             placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                                Image.asset('images/memes.jpeg'),
                           ),
                         ),
                       ));
@@ -161,7 +161,7 @@ class _CatogoryViewState extends State<CatogoryView> {
                 itemBuilder: (context, i) {
                   return InkWell(
                       onTap: () {
-                        showInterstitialAd();
+                        // showInterstitialAd();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -175,7 +175,7 @@ class _CatogoryViewState extends State<CatogoryView> {
                           child: CachedNetworkImage(
                             imageUrl: test[i]['url'],
                             placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                                Image.asset('images/memes.jpeg'),
                           ),
                         ),
                       ));

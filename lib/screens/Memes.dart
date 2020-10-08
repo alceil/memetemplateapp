@@ -17,6 +17,7 @@ class _WallScreen1State extends State<WallScreen1> {
   final TextEditingController _controller = new TextEditingController();
   List imgurls = [];
   List<General> catlist = [];
+  bool loader = true;
   // final List<General> _fav = [];
   bool alreadysaved = false;
 
@@ -25,6 +26,7 @@ class _WallScreen1State extends State<WallScreen1> {
     setState(() {
       imgurls = res;
       catlist = imgurls.map((e) => General.fromJson(e)).toList();
+      loader = false;
     });
   }
 
@@ -47,7 +49,8 @@ class _WallScreen1State extends State<WallScreen1> {
                 borderRadius: BorderRadius.circular(16),
                 child: CachedNetworkImage(
                   imageUrl: gen.imgurl,
-                  placeholder: (context, url) => CircularProgressIndicator(),
+                  placeholder: (context, url) =>
+                      Image.asset('images/memes.jpeg'),
                 ),
               ),
               // Positioned(
@@ -108,7 +111,8 @@ class _WallScreen1State extends State<WallScreen1> {
                 borderRadius: BorderRadius.circular(16),
                 child: CachedNetworkImage(
                   imageUrl: gen.imgurl,
-                  placeholder: (context, url) => CircularProgressIndicator(),
+                  placeholder: (context, url) =>
+                      Image.asset('images/memes.jpeg'),
                 ),
               ),
               // Positioned(
@@ -212,65 +216,75 @@ class _WallScreen1State extends State<WallScreen1> {
 
   @override
   Widget build(BuildContext context) {
-    getData();
-    return new Scaffold(
-      key: globalKey,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Color(0xfff5f8fd),
-              borderRadius: BorderRadius.circular(30),
+    return loader
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text('Memes'),
             ),
-            margin: EdgeInsets.symmetric(horizontal: 24),
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                    child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                      hintText: "search wallpapers", border: InputBorder.none),
-                  onChanged: searchOperation,
-                )),
-                Container(child: Icon(Icons.search))
+            key: globalKey,
+            body: Column(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xfff5f8fd),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                            hintText: "search wallpapers",
+                            border: InputBorder.none),
+                        onChanged: searchOperation,
+                      )),
+                      Container(child: Icon(Icons.search))
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: searchresult.length != 0 || _controller.text.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 6.0,
+                                    mainAxisSpacing: 6.0),
+                            itemCount: searchresult.length,
+                            itemBuilder: (context, i) {
+                              return _buildsearchgrid(searchresult[i]);
+                            },
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 6.0,
+                                    mainAxisSpacing: 6.0),
+                            itemCount: catlist.length,
+                            itemBuilder: (context, i) {
+                              return _buildgrid(catlist[i]);
+                            },
+                          ),
+                        ),
+                ),
               ],
             ),
-          ),
-          Flexible(
-            child: searchresult.length != 0 || _controller.text.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 6.0,
-                          mainAxisSpacing: 6.0),
-                      itemCount: searchresult.length,
-                      itemBuilder: (context, i) {
-                        return _buildsearchgrid(searchresult[i]);
-                      },
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 6.0,
-                          mainAxisSpacing: 6.0),
-                      itemCount: catlist.length,
-                      itemBuilder: (context, i) {
-                        return _buildgrid(catlist[i]);
-                      },
-                    ),
-                  ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }
