@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
+
 import 'package:flutter/material.dart';
 import 'package:memetemplate/screens/fullscreen.dart';
 
@@ -34,24 +35,81 @@ class _CatogoryViewState extends State<CatogoryView> {
     return 'ca-app-pub-8197704697256296~8003992887';
   }
 
-  InterstitialAd myInterstitial;
+  // InterstitialAd myInterstitial;
 
-  InterstitialAd buildInterstitialAd() {
-    return InterstitialAd(
-      adUnitId: getintadid(),
-      listener: (MobileAdEvent event) {
-        if (event == MobileAdEvent.failedToLoad) {
-          myInterstitial..load();
-        } else if (event == MobileAdEvent.closed) {
-          myInterstitial = buildInterstitialAd()..load();
+  // InterstitialAd buildInterstitialAd() {
+  //   return InterstitialAd(
+  //     adUnitId: getintadid(),
+  //     listener: (MobileAdEvent event) {
+  //       if (event == MobileAdEvent.failedToLoad) {
+  //         myInterstitial..load();
+  //       } else if (event == MobileAdEvent.closed) {
+  //         myInterstitial = buildInterstitialAd()..load();
+  //       }
+  //       print(event);
+  //     },
+  //   );
+  // }
+
+  // void showInterstitialAd() {
+  //   myInterstitial..show();
+  // }
+
+  bool _isInterstitialAdLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    test = loc;
+    // getData();
+    FacebookAudienceNetwork.init();
+    _loadInterstitialAd();
+    //showBannerAd();
+  }
+
+  void _loadInterstitialAd() {
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId:
+          "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+      listener: (result, value) {
+        print(">> FAN > Interstitial Ad: $result --> $value");
+        if (result == InterstitialAdResult.LOADED)
+          _isInterstitialAdLoaded = true;
+
+        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+        /// load a fresh Ad by calling this function.
+        if (result == InterstitialAdResult.DISMISSED &&
+            value["invalidated"] == true) {
+          _isInterstitialAdLoaded = false;
+          _loadInterstitialAd();
         }
-        print(event);
       },
     );
   }
 
-  void showInterstitialAd() {
-    myInterstitial..show();
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
+
+  _showInterstitialAd() {
+    if (_isInterstitialAdLoaded == true)
+      FacebookInterstitialAd.showInterstitialAd();
+    else
+      print("Interstial Ad not yet loaded!");
+  }
+
+  showBannerAd() {
+    setState(() {
+      _currentAd = FacebookBannerAd(
+        placementId:
+            "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+        bannerSize: BannerSize.STANDARD,
+        listener: (result, value) {
+          print("Banner Ad: $result -->  $value");
+        },
+      );
+    });
   }
 
   void searchOperation(String searchText) {
@@ -64,12 +122,12 @@ class _CatogoryViewState extends State<CatogoryView> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    test = loc;
-    print(loc);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   test = loc;
+  //   print(loc);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +186,7 @@ class _CatogoryViewState extends State<CatogoryView> {
                 itemBuilder: (context, i) {
                   return InkWell(
                       onTap: () {
-                        // showInterstitialAd();
+                        _showInterstitialAd();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -161,7 +219,7 @@ class _CatogoryViewState extends State<CatogoryView> {
                 itemBuilder: (context, i) {
                   return InkWell(
                       onTap: () {
-                        // showInterstitialAd();
+                        _showInterstitialAd();
                         Navigator.push(
                             context,
                             MaterialPageRoute(

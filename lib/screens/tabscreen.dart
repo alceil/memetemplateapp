@@ -1,4 +1,4 @@
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:memetemplate/screens/Memes.dart';
 import 'package:memetemplate/screens/categories.dart';
@@ -29,6 +29,8 @@ class _HomeState extends State<Home> {
     return 'ca-app-pub-8197704697256296~8003992887';
   }
 
+  bool _isInterstitialAdLoaded = false;
+
   // String bannerid() {
   //   return 'ca-app-pub-3263954522700294/4117286019';
   // }
@@ -46,41 +48,94 @@ class _HomeState extends State<Home> {
   //       });
   // }
 
-  InterstitialAd myInterstitial;
+  // InterstitialAd myInterstitial;
 
-  InterstitialAd buildInterstitialAd() {
-    return InterstitialAd(
-      adUnitId: getintadid(),
-      listener: (MobileAdEvent event) {
-        if (event == MobileAdEvent.failedToLoad) {
-          myInterstitial..load();
-        } else if (event == MobileAdEvent.closed) {
-          myInterstitial = buildInterstitialAd()..load();
-        }
-        print(event);
-      },
-    );
-  }
+  // InterstitialAd buildInterstitialAd() {
+  //   return InterstitialAd(
+  //     adUnitId: getintadid(),
+  //     listener: (MobileAdEvent event) {
+  //       if (event == MobileAdEvent.failedToLoad) {
+  //         myInterstitial..load();
+  //       } else if (event == MobileAdEvent.closed) {
+  //         myInterstitial = buildInterstitialAd()..load();
+  //       }
+  //       print(event);
+  //     },
+  //   );
+  // }
 
-  void showInterstitialAd() {
-    myInterstitial..show();
-  }
+  // void showInterstitialAd() {
+  //   myInterstitial..show();
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   // FirebaseAdMob.instance.initialize(appId: appid());
+  //   // // myBanner = buildBannerAd()..load();
+  //   // myInterstitial = buildInterstitialAd()..load();
+  // }
 
   @override
   void initState() {
     super.initState();
-
-    FirebaseAdMob.instance.initialize(appId: appid());
-    // myBanner = buildBannerAd()..load();
-    myInterstitial = buildInterstitialAd()..load();
+    FacebookAudienceNetwork.init();
+    _loadInterstitialAd();
+    //showBannerAd();
   }
 
-  @override
-  void dispose() {
-    // myBanner.dispose();
-    myInterstitial.dispose();
-    super.dispose();
+  void _loadInterstitialAd() {
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId:
+          "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+      listener: (result, value) {
+        print(">> FAN > Interstitial Ad: $result --> $value");
+        if (result == InterstitialAdResult.LOADED)
+          _isInterstitialAdLoaded = true;
+
+        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+        /// load a fresh Ad by calling this function.
+        if (result == InterstitialAdResult.DISMISSED &&
+            value["invalidated"] == true) {
+          _isInterstitialAdLoaded = false;
+          _loadInterstitialAd();
+        }
+      },
+    );
   }
+
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
+
+  _showInterstitialAd() {
+    if (_isInterstitialAdLoaded == true)
+      FacebookInterstitialAd.showInterstitialAd();
+    else
+      print("Interstial Ad not yet loaded!");
+  }
+
+  showBannerAd() {
+    setState(() {
+      _currentAd = FacebookBannerAd(
+        placementId:
+            "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+        bannerSize: BannerSize.STANDARD,
+        listener: (result, value) {
+          print("Banner Ad: $result -->  $value");
+        },
+      );
+    });
+  }
+
+  // @override
+  // void dispose() {
+  //   // myBanner.dispose();
+  //   // myInterstitial.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +163,7 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.image),
                     title: Text('Memes'),
                     onTap: () {
-                      showInterstitialAd();
+                      _showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -119,7 +174,7 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.image_aspect_ratio),
                     title: Text('Templates'),
                     onTap: () {
-                      showInterstitialAd();
+                      _showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

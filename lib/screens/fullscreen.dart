@@ -49,7 +49,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
   Future<void> createFolder() async {
     Directory baseDir = await getExternalStorageDirectory(); //only for Android
     // Directory baseDir = await getApplicationDocumentsDirectory(); //works for both iOS and Android
-    String dirToBeCreated = "cgsteam";
+    String dirToBeCreated = "DCIM/cgsteam";
 
     String finalDir = baseDir.path
             .replaceAll("Android/data/com.cgsteam.memetemplate/files", '') +
@@ -98,7 +98,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
     try {
       // var dir = await getExternalStorageDirectory();
       loc =
-          "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}cgsteam/$filename.png";
+          "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}DCIM/Camera/$filename.jpg";
       await dio.download(imgUrl, loc, onReceiveProgress: (rec, total) {
         print("Rec: $rec , Total: $total");
 
@@ -204,7 +204,10 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                       final status = await Permission.storage.request();
 
                       if (status.isGranted) {
-                        await createFolder();
+                        // await createFolder();
+                        downloadFile(widget.imgPath, widget.filename);
+
+                        //
                         // saveFile(widget.imgPath, widget.filename);
 
                         // Fluttertoast.showToast(
@@ -213,16 +216,16 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                         //     backgroundColor: Colors.green,
                         //     textColor: Colors.white);
                         // print("Download completed");
-                        String filename = widget.filename + ".jpg";
-                        String loc =
-                            "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}cgsteam";
-                        final id = await FlutterDownloader.enqueue(
-                          url: widget.imgPath,
-                          savedDir: loc,
-                          fileName: filename,
-                          showNotification: true,
-                          openFileFromNotification: true,
-                        );
+                        // String filename = widget.filename + ".jpg";
+                        // String loc =
+                        //     "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}DCIM";
+                        // final id = await FlutterDownloader.enqueue(
+                        //   url: widget.imgPath,
+                        //   savedDir: loc,
+                        //   fileName: filename,
+                        //   showNotification: true,
+                        //   openFileFromNotification: true,
+                        // );
                       } else {
                         print("Permission deined");
                       }
