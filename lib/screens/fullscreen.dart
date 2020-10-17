@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'dart:io';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -28,6 +29,59 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
   bool downloading = false;
   String loc;
   var progressString = "";
+  bool _isInterstitialAdLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    FacebookAudienceNetwork.init();
+    //// _loadInterstitialAd();
+    showBannerAd();
+  }
+
+  void _loadInterstitialAd() {
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId:
+          "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+      listener: (result, value) {
+        print(">> FAN > Interstitial Ad: $result --> $value");
+        if (result == InterstitialAdResult.LOADED)
+          _isInterstitialAdLoaded = true;
+
+        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+        /// load a fresh Ad by calling this function.
+        if (result == InterstitialAdResult.DISMISSED &&
+            value["invalidated"] == true) {
+          _isInterstitialAdLoaded = false;
+          // _loadInterstitialAd();
+        }
+      },
+    );
+  }
+
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
+
+  _showInterstitialAd() {
+    if (_isInterstitialAdLoaded == true)
+      FacebookInterstitialAd.showInterstitialAd();
+    else
+      print("Interstial Ad not yet loaded!");
+  }
+
+  showBannerAd() {
+    setState(() {
+      _currentAd = FacebookBannerAd(
+        placementId: "1219781665081235_1226333427759392", //testid
+        bannerSize: BannerSize.STANDARD,
+        listener: (result, value) {
+          print("Banner Ad: $result -->  $value");
+        },
+      );
+    });
+  }
 
   // @override
   // void initState() {
@@ -98,7 +152,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
     try {
       // var dir = await getExternalStorageDirectory();
       loc =
-          "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}DCIM/Camera/$filename.jpg";
+          "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}Download/$filename.jpg";
       await dio.download(imgUrl, loc, onReceiveProgress: (rec, total) {
         print("Rec: $rec , Total: $total");
 
@@ -117,6 +171,12 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
       downloading = false;
       progressString = "Completed";
     });
+
+    Fluttertoast.showToast(
+        msg: "Check your Download,folder",
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.green,
+        textColor: Colors.white);
   }
 
   @override
@@ -173,28 +233,25 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                   SizedBox(
                     height: 50,
                   ),
-                  new Hero(
-                    tag: widget.imgPath,
-                    child: new Image.network(
-                      widget.imgPath,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Container(
-                          height: height / 2,
-                          width: width,
-                          color: Colors.black,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes
-                                  : null,
-                            ),
+                  new Image.network(
+                    widget.imgPath,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: height / 2,
+                        width: width,
+                        color: Colors.black,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                : null,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(
                     height: 20,
@@ -254,6 +311,14 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                       )),
                     ),
                   ),
+                  Flexible(
+                    child: Align(
+                      alignment: Alignment(0, 1.0),
+                      child: _currentAd,
+                    ),
+                    fit: FlexFit.tight,
+                    flex: 3,
+                  )
                 ],
               ),
             ),

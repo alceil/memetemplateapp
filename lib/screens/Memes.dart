@@ -35,48 +35,44 @@ class _WallScreen1State extends State<WallScreen1> {
     // this.alreadysaved = _fav.contains(gen);
     return InkWell(
         onTap: () {
-          _showInterstitialAd();
+          //_showInterstitialAd();
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       FullScreenImagePage(gen.imgurl, gen.memename)));
         },
-        child: Hero(
-          tag: gen.imgurl,
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: CachedNetworkImage(
-                  imageUrl: gen.imgurl,
-                  placeholder: (context, url) =>
-                      Image.asset('images/memes.jpeg'),
-                ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CachedNetworkImage(
+                imageUrl: gen.imgurl,
+                placeholder: (context, url) => Image.asset('images/memes.jpeg'),
               ),
-              // Positioned(
-              //   bottom: 0,
-              //   left: 140,
-              //   child: IconButton(
-              //     icon: Icon(
-              //       alreadysaved ? Icons.favorite : Icons.favorite_border,
-              //       color: Colors.pink,
-              //     ),
-              //     onPressed: () {
-              //       setState(() {
-              //         if (alreadysaved) {
-              //           _fav.remove(gen);
-              //           print(_fav);
-              //         } else {
-              //           _fav.add(gen);
-              //           print(_fav);
-              //         }
-              //       });
-              //     },
-              //   ),
-              // ),
-            ],
-          ),
+            ),
+            // Positioned(
+            //   bottom: 0,
+            //   left: 140,
+            //   child: IconButton(
+            //     icon: Icon(
+            //       alreadysaved ? Icons.favorite : Icons.favorite_border,
+            //       color: Colors.pink,
+            //     ),
+            //     onPressed: () {
+            //       setState(() {
+            //         if (alreadysaved) {
+            //           _fav.remove(gen);
+            //           print(_fav);
+            //         } else {
+            //           _fav.add(gen);
+            //           print(_fav);
+            //         }
+            //       });
+            //     },
+            //   ),
+            // ),
+          ],
         ));
   }
 
@@ -84,61 +80,57 @@ class _WallScreen1State extends State<WallScreen1> {
     // this.alreadysaved = _fav.contains(gen);
     return InkWell(
         onTap: () {
-          _showInterstitialAd();
+          //_showInterstitialAd();
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       FullScreenImagePage(gen.imgurl, gen.memename)));
         },
-        child: Hero(
-          tag: gen.imgurl,
-          child: Stack(
-            children: [
-              // IconButton(
-              //   icon: Icon(
-              //     this.alreadysaved ? Icons.favorite : Icons.favorite_border,
-              //     color: Colors.pink,
-              //   ),
-              //   onPressed: () {
-              //     if (alreadysaved) {
-              //       _fav.remove(gen);
-              //     } else {
-              //       _fav.add(gen);
-              //     }
-              //   },
-              // ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: CachedNetworkImage(
-                  imageUrl: gen.imgurl,
-                  placeholder: (context, url) =>
-                      Image.asset('images/memes.jpeg'),
-                ),
+        child: Stack(
+          children: [
+            // IconButton(
+            //   icon: Icon(
+            //     this.alreadysaved ? Icons.favorite : Icons.favorite_border,
+            //     color: Colors.pink,
+            //   ),
+            //   onPressed: () {
+            //     if (alreadysaved) {
+            //       _fav.remove(gen);
+            //     } else {
+            //       _fav.add(gen);
+            //     }
+            //   },
+            // ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CachedNetworkImage(
+                imageUrl: gen.imgurl,
+                placeholder: (context, url) => Image.asset('images/memes.jpeg'),
               ),
-              // Positioned(
-              //   bottom: 0,
-              //   left: 140,
-              //   child: IconButton(
-              //     icon: Icon(
-              //       this.alreadysaved ? Icons.favorite : Icons.favorite_border,
-              //       color: alreadysaved ? Colors.pink : null,
-              //     ),
-              //     onPressed: () {
-              //       setState(() {
-              //         if (alreadysaved) {
-              //           _fav.remove(gen);
-              //           print(_fav);
-              //         } else {
-              //           _fav.add(gen);
-              //           print(_fav);
-              //         }
-              //       });
-              //     },
-              //   ),
-              // ),
-            ],
-          ),
+            ),
+            // Positioned(
+            //   bottom: 0,
+            //   left: 140,
+            //   child: IconButton(
+            //     icon: Icon(
+            //       this.alreadysaved ? Icons.favorite : Icons.favorite_border,
+            //       color: alreadysaved ? Colors.pink : null,
+            //     ),
+            //     onPressed: () {
+            //       setState(() {
+            //         if (alreadysaved) {
+            //           _fav.remove(gen);
+            //           print(_fav);
+            //         } else {
+            //           _fav.add(gen);
+            //           print(_fav);
+            //         }
+            //       });
+            //     },
+            //   ),
+            // ),
+          ],
         ));
   }
 
@@ -161,7 +153,7 @@ class _WallScreen1State extends State<WallScreen1> {
     super.initState();
     getData();
     FacebookAudienceNetwork.init();
-    _loadInterstitialAd();
+    // _loadInterstitialAd();
     //showBannerAd();
   }
 
@@ -179,7 +171,7 @@ class _WallScreen1State extends State<WallScreen1> {
         if (result == InterstitialAdResult.DISMISSED &&
             value["invalidated"] == true) {
           _isInterstitialAdLoaded = false;
-          _loadInterstitialAd();
+          // _loadInterstitialAd();
         }
       },
     );
@@ -200,8 +192,7 @@ class _WallScreen1State extends State<WallScreen1> {
   showBannerAd() {
     setState(() {
       _currentAd = FacebookBannerAd(
-        placementId:
-            "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+        placementId: "1219781665081235_1226333427759392", //testid
         bannerSize: BannerSize.STANDARD,
         listener: (result, value) {
           print("Banner Ad: $result -->  $value");

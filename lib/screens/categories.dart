@@ -97,7 +97,7 @@ class _CategoriesState extends State<Categories> {
     super.initState();
     getData();
     FacebookAudienceNetwork.init();
-    _loadInterstitialAd();
+    // _loadInterstitialAd();
     //showBannerAd();
   }
 
@@ -115,7 +115,7 @@ class _CategoriesState extends State<Categories> {
         if (result == InterstitialAdResult.DISMISSED &&
             value["invalidated"] == true) {
           _isInterstitialAdLoaded = false;
-          _loadInterstitialAd();
+          // _loadInterstitialAd();
         }
       },
     );
@@ -136,8 +136,7 @@ class _CategoriesState extends State<Categories> {
   showBannerAd() {
     setState(() {
       _currentAd = FacebookBannerAd(
-        placementId:
-            "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+        placementId: "1219781665081235_1226333427759392", //testid
         bannerSize: BannerSize.STANDARD,
         listener: (result, value) {
           print("Banner Ad: $result -->  $value");
@@ -198,7 +197,7 @@ class _CategoriesState extends State<Categories> {
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: () {
-                                  _showInterstitialAd();
+                                  //_showInterstitialAd();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -233,7 +232,7 @@ class _CategoriesState extends State<Categories> {
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: () {
-                                  _showInterstitialAd();
+                                  //_showInterstitialAd();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -271,7 +270,7 @@ class _CategoriesState extends State<Categories> {
 //               itemCount: imgurls.length,
 //               itemBuilder: (context, i) => InkWell(
 //                     onTap: () {
-//                      _showInterstitialAd();
+//                      //_showInterstitialAd();
 //                       Navigator.push(
 //                           context,
 //                           MaterialPageRoute(

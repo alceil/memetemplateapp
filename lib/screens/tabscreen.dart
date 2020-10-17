@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     FacebookAudienceNetwork.init();
-    _loadInterstitialAd();
+    // _loadInterstitialAd();
     //showBannerAd();
   }
 
@@ -99,7 +99,7 @@ class _HomeState extends State<Home> {
         if (result == InterstitialAdResult.DISMISSED &&
             value["invalidated"] == true) {
           _isInterstitialAdLoaded = false;
-          _loadInterstitialAd();
+          // _loadInterstitialAd();
         }
       },
     );
@@ -120,8 +120,7 @@ class _HomeState extends State<Home> {
   showBannerAd() {
     setState(() {
       _currentAd = FacebookBannerAd(
-        placementId:
-            "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+        placementId: "1219781665081235_1226333427759392", //testid
         bannerSize: BannerSize.STANDARD,
         listener: (result, value) {
           print("Banner Ad: $result -->  $value");
@@ -163,7 +162,7 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.image),
                     title: Text('Memes'),
                     onTap: () {
-                      _showInterstitialAd();
+                      //_showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -174,7 +173,7 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.image_aspect_ratio),
                     title: Text('Templates'),
                     onTap: () {
-                      _showInterstitialAd();
+                      //_showInterstitialAd();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

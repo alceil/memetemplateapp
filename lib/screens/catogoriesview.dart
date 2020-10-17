@@ -63,7 +63,7 @@ class _CatogoryViewState extends State<CatogoryView> {
     test = loc;
     // getData();
     FacebookAudienceNetwork.init();
-    _loadInterstitialAd();
+    // _loadInterstitialAd();
     //showBannerAd();
   }
 
@@ -81,7 +81,7 @@ class _CatogoryViewState extends State<CatogoryView> {
         if (result == InterstitialAdResult.DISMISSED &&
             value["invalidated"] == true) {
           _isInterstitialAdLoaded = false;
-          _loadInterstitialAd();
+          // _loadInterstitialAd();
         }
       },
     );
@@ -102,8 +102,7 @@ class _CatogoryViewState extends State<CatogoryView> {
   showBannerAd() {
     setState(() {
       _currentAd = FacebookBannerAd(
-        placementId:
-            "IMG_16_9_APP_INSTALL#2312433698835503_2964944860251047", //testid
+        placementId: "1219781665081235_1226333427759392", //testid
         bannerSize: BannerSize.STANDARD,
         listener: (result, value) {
           print("Banner Ad: $result -->  $value");
@@ -186,7 +185,7 @@ class _CatogoryViewState extends State<CatogoryView> {
                 itemBuilder: (context, i) {
                   return InkWell(
                       onTap: () {
-                        _showInterstitialAd();
+                        //_showInterstitialAd();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -194,15 +193,12 @@ class _CatogoryViewState extends State<CatogoryView> {
                                     searchresult[i]['url'],
                                     searchresult[i]['memename'])));
                       },
-                      child: Hero(
-                        tag: searchresult[i]['url'],
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CachedNetworkImage(
-                            imageUrl: searchresult[i]['url'],
-                            placeholder: (context, url) =>
-                                Image.asset('images/memes.jpeg'),
-                          ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: CachedNetworkImage(
+                          imageUrl: searchresult[i]['url'],
+                          placeholder: (context, url) =>
+                              Image.asset('images/memes.jpeg'),
                         ),
                       ));
                 },
@@ -219,22 +215,19 @@ class _CatogoryViewState extends State<CatogoryView> {
                 itemBuilder: (context, i) {
                   return InkWell(
                       onTap: () {
-                        _showInterstitialAd();
+                        //_showInterstitialAd();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => FullScreenImagePage(
                                     test[i]['url'], test[i]['memename'])));
                       },
-                      child: Hero(
-                        tag: test[i]['url'],
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CachedNetworkImage(
-                            imageUrl: test[i]['url'],
-                            placeholder: (context, url) =>
-                                Image.asset('images/memes.jpeg'),
-                          ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: CachedNetworkImage(
+                          imageUrl: test[i]['url'],
+                          placeholder: (context, url) =>
+                              Image.asset('images/memes.jpeg'),
                         ),
                       ));
                 },
