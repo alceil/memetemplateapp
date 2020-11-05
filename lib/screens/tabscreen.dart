@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
                       )),
                   ListTile(
                     leading: Icon(Icons.image),
-                    title: Text('Memes'),
+                    title: Text('Templates'),
                     onTap: () {
                       //_showInterstitialAd();
                       Navigator.push(
@@ -171,7 +171,7 @@ class _HomeState extends State<Home> {
                   ),
                   ListTile(
                     leading: Icon(Icons.image_aspect_ratio),
-                    title: Text('Templates'),
+                    title: Text('Categories'),
                     onTap: () {
                       //_showInterstitialAd();
                       Navigator.push(
@@ -278,7 +278,7 @@ class _HomeState extends State<Home> {
               actions: <Widget>[],
               bottom: TabBar(tabs: <Widget>[
                 Tab(
-                  text: 'Memes',
+                  text: 'Templates',
                 ),
                 Tab(text: 'Categories'),
               ]),

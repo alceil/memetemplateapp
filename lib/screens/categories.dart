@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:memetemplate/models/Category.dart';
 import 'package:memetemplate/screens/catogoriesview.dart';
@@ -21,7 +24,7 @@ class _CategoriesState extends State<Categories> {
   List<Category> catlist = [];
 
   String getintadid() {
-    return 'ca-app-pub-8197704697256296/3861583802';
+    return 'ca-app-pub-8197704697256296/8387169056';
   }
 
   String appid() {
@@ -45,20 +48,20 @@ class _CategoriesState extends State<Categories> {
   //       });
   // }
 
-  // InterstitialAd myInterstitial;
-  // InterstitialAd buildInterstitialAd() {
-  //   return InterstitialAd(
-  //     adUnitId: getintadid(),
-  //     listener: (MobileAdEvent event) {
-  //       if (event == MobileAdEvent.failedToLoad) {
-  //         myInterstitial..load();
-  //       } else if (event == MobileAdEvent.closed) {
-  //         myInterstitial = buildInterstitialAd()..load();
-  //       }
-  //       print(event);
-  //     },
-  //   );
-  // }
+  InterstitialAd myInterstitial;
+  InterstitialAd buildInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: getintadid(),
+      listener: (MobileAdEvent event) {
+        if (event == MobileAdEvent.failedToLoad) {
+          myInterstitial..load();
+        } else if (event == MobileAdEvent.closed) {
+          myInterstitial = buildInterstitialAd()..load();
+        }
+        print(event);
+      },
+    );
+  }
 
   void getData() async {
     var res = await networkHandler.get("/memes/addMeme");
@@ -70,9 +73,9 @@ class _CategoriesState extends State<Categories> {
     });
   }
 
-  // void showInterstitialAd() {
-  //   myInterstitial..show();
-  // }
+  void showInterstitialAd() {
+    myInterstitial..show();
+  }
 
   // @override
   // void initState() {
@@ -83,12 +86,12 @@ class _CategoriesState extends State<Categories> {
   //   getData();
   // }
 
-  // @override
-  // void dispose() {
-  //   myBanner.dispose();
-  //   myInterstitial.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    // myBanner.dispose();
+    myInterstitial.dispose();
+    super.dispose();
+  }
 
   bool _isInterstitialAdLoaded = false;
 
@@ -96,9 +99,20 @@ class _CategoriesState extends State<Categories> {
   void initState() {
     super.initState();
     getData();
-    FacebookAudienceNetwork.init();
+    FirebaseAdMob.instance.initialize(appId: appid());
+    myInterstitial = buildInterstitialAd()..load();
+    // FacebookAudienceNetwork.init();
     // _loadInterstitialAd();
     //showBannerAd();
+  }
+
+  void showRandomInterstitialAd() {
+    Random r = new Random();
+    bool value = r.nextBool();
+
+    if (value == true) {
+      myInterstitial..show();
+    }
   }
 
   void _loadInterstitialAd() {
@@ -180,7 +194,7 @@ class _CategoriesState extends State<Categories> {
                           child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
-                            hintText: "search templates",
+                            hintText: "search categories",
                             border: InputBorder.none),
                         onChanged: searchOperation,
                       )),
@@ -197,7 +211,7 @@ class _CategoriesState extends State<Categories> {
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: () {
-                                  //_showInterstitialAd();
+                                  showRandomInterstitialAd();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -232,7 +246,7 @@ class _CategoriesState extends State<Categories> {
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: () {
-                                  //_showInterstitialAd();
+                                  showRandomInterstitialAd();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

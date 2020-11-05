@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 import 'package:flutter/material.dart';
 import 'package:memetemplate/models/general.dart';
@@ -37,7 +40,9 @@ class _WallScreenState extends State<WallScreen> {
   void initState() {
     super.initState();
     getData();
-    FacebookAudienceNetwork.init();
+    FirebaseAdMob.instance.initialize(appId: appid());
+    myInterstitial = buildInterstitialAd()..load();
+    // FacebookAudienceNetwork.init();
     // _loadInterstitialAd();
     //showBannerAd();
   }
@@ -90,6 +95,7 @@ class _WallScreenState extends State<WallScreen> {
     // this.alreadysaved = _fav.contains(gen);
     return InkWell(
         onTap: () {
+          showRandomInterstitialAd();
           //_showInterstitialAd();
           Navigator.push(
               context,
@@ -135,7 +141,7 @@ class _WallScreenState extends State<WallScreen> {
     // this.alreadysaved = _fav.contains(gen);
     return InkWell(
         onTap: () {
-          //_showInterstitialAd();
+          showRandomInterstitialAd();
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -189,13 +195,13 @@ class _WallScreenState extends State<WallScreen> {
         ));
   }
 
-  // String getintadid() {
-  //   return 'ca-app-pub-8197704697256296/3861583802';
-  // }
+  String getintadid() {
+    return 'ca-app-pub-8197704697256296/8387169056';
+  }
 
-  // String appid() {
-  //   return 'ca-app-pub-8197704697256296~8003992887';
-  // }
+  String appid() {
+    return 'ca-app-pub-8197704697256296~8003992887';
+  }
 
   // String bannerid() {
   //   return 'ca-app-pub-3263954522700294/4117286019';
@@ -214,33 +220,42 @@ class _WallScreenState extends State<WallScreen> {
   //       });
   // }
 
-  // InterstitialAd myInterstitial;
+  InterstitialAd myInterstitial;
 
-  // InterstitialAd buildInterstitialAd() {
-  //   return InterstitialAd(
-  //     adUnitId: getintadid(),
-  //     listener: (MobileAdEvent event) {
-  //       if (event == MobileAdEvent.failedToLoad) {
-  //         myInterstitial..load();
-  //       } else if (event == MobileAdEvent.closed) {
-  //         myInterstitial = buildInterstitialAd()..load();
-  //       }
-  //       print(event);
-  //     },
-  //   );
-  // }
+  InterstitialAd buildInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: getintadid(),
+      listener: (MobileAdEvent event) {
+        if (event == MobileAdEvent.failedToLoad) {
+          myInterstitial..load();
+        } else if (event == MobileAdEvent.closed) {
+          myInterstitial = buildInterstitialAd()..load();
+        }
+        print(event);
+      },
+    );
+  }
 
-  // void showInterstitialAd() {
-  //   myInterstitial..show();
-  // }
+  void showInterstitialAd() {
+    myInterstitial..show();
+  }
 
-  // @override
-  // void dispose() {
-  //   FirebaseAdMob.instance.initialize(appId: appid());
-  //   myBanner.dispose();
-  //   myInterstitial.dispose();
-  //   super.dispose();
-  // }
+  void showRandomInterstitialAd() {
+    Random r = new Random();
+    bool value = r.nextBool();
+
+    if (value == true) {
+      myInterstitial..show();
+    }
+  }
+
+  @override
+  void dispose() {
+    // FirebaseAdMob.instance.initialize(appId: appid());
+    // myBanner.dispose();
+    myInterstitial.dispose();
+    super.dispose();
+  }
 
   void searchOperation(String searchText) {
     setState(() {
@@ -279,7 +294,7 @@ class _WallScreenState extends State<WallScreen> {
                           child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
-                            hintText: "search wallpapers",
+                            hintText: "search templates",
                             border: InputBorder.none),
                         onChanged: searchOperation,
                       )),

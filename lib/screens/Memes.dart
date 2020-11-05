@@ -271,7 +271,7 @@ class _WallScreen1State extends State<WallScreen1> {
         : Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text('Memes'),
+              title: Text('Templates'),
             ),
             key: globalKey,
             body: Column(
@@ -292,7 +292,7 @@ class _WallScreen1State extends State<WallScreen1> {
                           child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
-                            hintText: "search wallpapers",
+                            hintText: "search templates",
                             border: InputBorder.none),
                         onChanged: searchOperation,
                       )),

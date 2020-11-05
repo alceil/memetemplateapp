@@ -164,7 +164,7 @@ class _Categories1State extends State<Categories1> {
             key: globalKey,
             appBar: AppBar(
               centerTitle: true,
-              title: Text('Templates'),
+              title: Text('Categories'),
             ),
             body: Column(
               children: [
@@ -184,7 +184,7 @@ class _Categories1State extends State<Categories1> {
                           child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(
-                            hintText: "search wallpapers",
+                            hintText: "search categories",
                             border: InputBorder.none),
                         onChanged: searchOperation,
                       )),

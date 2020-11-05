@@ -36,7 +36,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
     super.initState();
     FacebookAudienceNetwork.init();
     //// _loadInterstitialAd();
-    showBannerAd();
+    // showBannerAd();
   }
 
   void _loadInterstitialAd() {
