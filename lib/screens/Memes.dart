@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:facebook_audience_network/facebook_audience_network.dart';
+// //import 'package:facebook_audience_network/facebook_audience_network.dart';
 
 import 'package:flutter/material.dart';
 import 'package:memetemplate/models/general.dart';
@@ -152,54 +152,54 @@ class _WallScreen1State extends State<WallScreen1> {
   void initState() {
     super.initState();
     getData();
-    FacebookAudienceNetwork.init();
+    // FacebookAudienceNetwork.init();
     // _loadInterstitialAd();
     //showBannerAd();
   }
 
-  void _loadInterstitialAd() {
-    FacebookInterstitialAd.loadInterstitialAd(
-      placementId:
-          "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
-      listener: (result, value) {
-        print(">> FAN > Interstitial Ad: $result --> $value");
-        if (result == InterstitialAdResult.LOADED)
-          _isInterstitialAdLoaded = true;
+  // void _loadInterstitialAd() {
+  //   FacebookInterstitialAd.loadInterstitialAd(
+  //     placementId:
+  //         "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+  //     listener: (result, value) {
+  //       print(">> FAN > Interstitial Ad: $result --> $value");
+  //       if (result == InterstitialAdResult.LOADED)
+  //         _isInterstitialAdLoaded = true;
 
-        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
-        /// load a fresh Ad by calling this function.
-        if (result == InterstitialAdResult.DISMISSED &&
-            value["invalidated"] == true) {
-          _isInterstitialAdLoaded = false;
-          // _loadInterstitialAd();
-        }
-      },
-    );
-  }
+  //       /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+  //       /// load a fresh Ad by calling this function.
+  //       if (result == InterstitialAdResult.DISMISSED &&
+  //           value["invalidated"] == true) {
+  //         _isInterstitialAdLoaded = false;
+  //         // _loadInterstitialAd();
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _currentAd = SizedBox(
     width: 0.0,
     height: 0.0,
   );
 
-  _showInterstitialAd() {
-    if (_isInterstitialAdLoaded == true)
-      FacebookInterstitialAd.showInterstitialAd();
-    else
-      print("Interstial Ad not yet loaded!");
-  }
+  // _showInterstitialAd() {
+  //   if (_isInterstitialAdLoaded == true)
+  //     FacebookInterstitialAd.showInterstitialAd();
+  //   else
+  //     print("Interstial Ad not yet loaded!");
+  // }
 
-  showBannerAd() {
-    setState(() {
-      _currentAd = FacebookBannerAd(
-        placementId: "1219781665081235_1226333427759392", //testid
-        bannerSize: BannerSize.STANDARD,
-        listener: (result, value) {
-          print("Banner Ad: $result -->  $value");
-        },
-      );
-    });
-  }
+  // showBannerAd() {
+  //   setState(() {
+  //     _currentAd = FacebookBannerAd(
+  //       placementId: "1219781665081235_1226333427759392", //testid
+  //       bannerSize: BannerSize.STANDARD,
+  //       listener: (result, value) {
+  //         print("Banner Ad: $result -->  $value");
+  //       },
+  //     );
+  //   });
+  // }
 
   // BannerAd myBanner;
 

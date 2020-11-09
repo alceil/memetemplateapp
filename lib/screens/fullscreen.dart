@@ -1,14 +1,17 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:facebook_audience_network/facebook_audience_network.dart';
+// //import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class FullScreenImagePage extends StatefulWidget {
   String imgPath;
@@ -34,54 +37,54 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
   @override
   void initState() {
     super.initState();
-    FacebookAudienceNetwork.init();
+    // FacebookAudienceNetwork.init();
     //// _loadInterstitialAd();
     // showBannerAd();
   }
 
-  void _loadInterstitialAd() {
-    FacebookInterstitialAd.loadInterstitialAd(
-      placementId:
-          "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
-      listener: (result, value) {
-        print(">> FAN > Interstitial Ad: $result --> $value");
-        if (result == InterstitialAdResult.LOADED)
-          _isInterstitialAdLoaded = true;
+  // void _loadInterstitialAd() {
+  //   FacebookInterstitialAd.loadInterstitialAd(
+  //     placementId:
+  //         "IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+  //     listener: (result, value) {
+  //       print(">> FAN > Interstitial Ad: $result --> $value");
+  //       if (result == InterstitialAdResult.LOADED)
+  //         _isInterstitialAdLoaded = true;
 
-        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
-        /// load a fresh Ad by calling this function.
-        if (result == InterstitialAdResult.DISMISSED &&
-            value["invalidated"] == true) {
-          _isInterstitialAdLoaded = false;
-          // _loadInterstitialAd();
-        }
-      },
-    );
-  }
+  //       /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+  //       /// load a fresh Ad by calling this function.
+  //       if (result == InterstitialAdResult.DISMISSED &&
+  //           value["invalidated"] == true) {
+  //         _isInterstitialAdLoaded = false;
+  //         // _loadInterstitialAd();
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _currentAd = SizedBox(
     width: 0.0,
     height: 0.0,
   );
 
-  _showInterstitialAd() {
-    if (_isInterstitialAdLoaded == true)
-      FacebookInterstitialAd.showInterstitialAd();
-    else
-      print("Interstial Ad not yet loaded!");
-  }
+  // _showInterstitialAd() {
+  //   if (_isInterstitialAdLoaded == true)
+  //     FacebookInterstitialAd.showInterstitialAd();
+  //   else
+  //     print("Interstial Ad not yet loaded!");
+  // }
 
-  showBannerAd() {
-    setState(() {
-      _currentAd = FacebookBannerAd(
-        placementId: "1219781665081235_1226333427759392", //testid
-        bannerSize: BannerSize.STANDARD,
-        listener: (result, value) {
-          print("Banner Ad: $result -->  $value");
-        },
-      );
-    });
-  }
+  // showBannerAd() {
+  //   setState(() {
+  //     _currentAd = FacebookBannerAd(
+  //       placementId: "1219781665081235_1226333427759392", //testid
+  //       bannerSize: BannerSize.STANDARD,
+  //       listener: (result, value) {
+  //         print("Banner Ad: $result -->  $value");
+  //       },
+  //     );
+  //   });
+  // }
 
   // @override
   // void initState() {
@@ -179,149 +182,285 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
         textColor: Colors.white);
   }
 
+  Future<void> imagedownload(BuildContext context,String url) async
+  {
+      var imageid = await ImageDownloader.downloadImage(
+                              url);
+Scaffold.of(context).showSnackBar(
+  SnackBar(
+    content: Text('Download completed'),
+    action: SnackBarAction(label: 'Open', onPressed: () async
+    {
+  var path = await ImageDownloader.findPath(imageid);
+  ImageDownloader.open(path);
+    }
+     )
+    ,
+)
+);
+  }
+
+
+  Future<Null> saveAndShare(String imgpath,String imgfilename) async {
+    // setState(() {
+    //   isBtn2 = true;
+    // });
+    // final RenderBox box = context.findRenderObject();
+    if (Platform.isAndroid) {
+      var url = 'https://www.winklix.com/blog/wp-content/uploads/2020/01/6t1pv3xcd.png';
+      var response = await get(imgpath);
+      final documentDirectory = (await getExternalStorageDirectory()).path;
+      File imgFile = new File('$documentDirectory/$imgfilename.png');
+      imgFile.writeAsBytesSync(response.bodyBytes);
+
+      Share.shareFiles(['$documentDirectory/$imgfilename.png'],
+          subject: 'URL conversion + Share',
+          text: 'Download our app https://play.google.com/store/apps/details?id=com.cgsteam.memetemplate',
+          // sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+          );
+    } else {
+      Share.share('Hey! Checkout the Share Files repo',
+          subject: 'URL conversion + Share',
+          // sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+          );
+    }
+    // setState(() {
+    //   isBtn2 = false;
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return new Scaffold(
-      body: downloading
-          ? Center(
-              child: Container(
-                height: height,
-                width: width,
-                child: Card(
-                  color: Colors.black,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircularProgressIndicator(),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Text(
-                        "Downloading File: $progressString",
-                        style: TextStyle(
-                          color: Colors.white,
+      body: Builder(
+        builder: (BuildContext context)
+        {
+          return downloading? Center(
+                child: Container(
+                  height: height,
+                  width: width,
+                  child: Card(
+                    color: Colors.black,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 20.0,
                         ),
-                      )
-                    ],
+                        Text(
+                          "Downloading File: $progressString",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          : Container(
-              decoration: new BoxDecoration(gradient: backgroundGradient),
-              child: new Column(
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      new AppBar(
-                        elevation: 0.0,
-                        backgroundColor: Colors.transparent,
-                        leading: new IconButton(
-                          icon: new Icon(
-                            Icons.close,
-                            color: Colors.black,
+              )
+            : Container(
+                decoration: new BoxDecoration(gradient: backgroundGradient),
+                child: new Column(
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        new AppBar(
+                          elevation: 0.0,
+                          backgroundColor: Colors.transparent,
+                          leading: new IconButton(
+                            icon: new Icon(
+                              Icons.close,
+                              color: Colors.black,
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
                           ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  new Image.network(
-                    widget.imgPath,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        height: height / 2,
-                        width: width,
-                        color: Colors.black,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes
-                                : null,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      final status = await Permission.storage.request();
-
-                      if (status.isGranted) {
-                        // await createFolder();
-                        downloadFile(widget.imgPath, widget.filename);
-
-                        //
-                        // saveFile(widget.imgPath, widget.filename);
-
-                        // Fluttertoast.showToast(
-                        //     msg: "Downloaded to $loc",
-                        //     toastLength: Toast.LENGTH_SHORT,
-                        //     backgroundColor: Colors.green,
-                        //     textColor: Colors.white);
-                        // print("Download completed");
-                        // String filename = widget.filename + ".jpg";
-                        // String loc =
-                        //     "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}DCIM";
-                        // final id = await FlutterDownloader.enqueue(
-                        //   url: widget.imgPath,
-                        //   savedDir: loc,
-                        //   fileName: filename,
-                        //   showNotification: true,
-                        //   openFileFromNotification: true,
-                        // );
-                      } else {
-                        print("Permission deined");
-                      }
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 200,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.blue),
-                      child: Center(
-                          child: Row(
-                        children: [
-                          SizedBox(
-                            width: 60,
-                          ),
-                          Text(
-                            'Download',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.arrow_downward,
-                            color: Colors.white,
-                          )
-                        ],
-                      )),
+                        )
+                      ],
                     ),
-                  ),
-                  Flexible(
-                    child: Align(
-                      alignment: Alignment(0, 1.0),
-                      child: _currentAd,
+                    SizedBox(
+                      height: 50,
                     ),
-                    fit: FlexFit.tight,
-                    flex: 3,
-                  )
-                ],
-              ),
-            ),
+                    new Image.network(
+                      widget.imgPath,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          height: height / 2,
+                          width: width,
+                          color: Colors.black,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            final status = await Permission.storage.request();
+
+                            if (status.isGranted) {
+                              // await createFolder();
+                              // downloadFile(widget.imgPath, widget.filename);
+                              // var imageid = await ImageDownloader.downloadImage(
+                              //   widget.imgPath
+
+                              // );
+                              // imagedownload(context, widget.imgPath);
+                           var imageid = await ImageDownloader.downloadImage(
+                                widget.imgPath);
+                                
+
+Scaffold.of(context).showSnackBar(
+  SnackBar(
+    content: Text('Download completed'),
+    action: SnackBarAction(label: 'Open', onPressed: () async
+    {
+  var path = await ImageDownloader.findPath(imageid);
+  ImageDownloader.open(path);
+    }
+     )
+    ,
+)
+);
+
+                              //
+                              // saveFile(widget.imgPath, widget.filename);
+
+                              // Fluttertoast.showToast(
+                              //     msg: "Downloaded to $loc",
+                              //     toastLength: Toast.LENGTH_SHORT,
+                              //     backgroundColor: Colors.green,
+                              //     textColor: Colors.white);
+                              // print("Download completed");
+                              // String filename = widget.filename + ".jpg";
+                              // String loc =
+                              //     "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}DCIM";
+                              // final id = await FlutterDownloader.enqueue(
+                              //   url: widget.imgPath,
+                              //   savedDir: loc,
+                              //   fileName: filename,
+                              //   showNotification: true,
+                              //   openFileFromNotification: true,
+                              // );
+                            } else {
+                              print("Permission deined");
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 180,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue),
+                            child: Center(
+                                child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 60,
+                                ),
+                                Text(
+                                  'Download',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.arrow_downward,
+                                  color: Colors.white,
+                                )
+                              ],
+                            )),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            final status = await Permission.storage.request();
+
+                            if (status.isGranted) {
+                              // await createFolder();
+                              // downloadFile(widget.imgPath, widget.filename);
+                              saveAndShare(widget.imgPath,widget.filename);
+
+                              //
+                              // saveFile(widget.imgPath, widget.filename);
+
+                              // Fluttertoast.showToast(
+                              //     msg: "Downloaded to $loc",
+                              //     toastLength: Toast.LENGTH_SHORT,
+                              //     backgroundColor: Colors.green,
+                              //     textColor: Colors.white);
+                              // print("Download completed");
+                              // String filename = widget.filename + ".jpg";
+                              // String loc =
+                              //     "${(await getExternalStorageDirectory()).path.replaceAll("Android/data/com.cgsteam.memetemplate/files", '')}DCIM";
+                              // final id = await FlutterDownloader.enqueue(
+                              //   url: widget.imgPath,
+                              //   savedDir: loc,
+                              //   fileName: filename,
+                              //   showNotification: true,
+                              //   openFileFromNotification: true,
+                              // );
+                            } else {
+                              print("Permission deined");
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 180,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue),
+                            child: Center(
+                                child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 60,
+                                ),
+                                Text(
+                                  'Share',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.share,
+                                  color: Colors.white,
+                                )
+                              ],
+                            )),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                    Flexible(
+                      child: Align(
+                        alignment: Alignment(0, 1.0),
+                        child: _currentAd,
+                      ),
+                      fit: FlexFit.tight,
+                      flex: 3,
+                    )
+                  ],
+                ),
+              );
+
+        },
+             
+      ),
     );
   }
 }
